@@ -4,6 +4,7 @@
   "description": "A banlist api that curls the yugioh banlist if there are any changes",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
