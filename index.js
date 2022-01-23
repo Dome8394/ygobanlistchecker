@@ -42,25 +42,26 @@ let requestLoop = setInterval(() => {
         if (currentDate !== oldDate) {
             console.log("There is a new banlist!");
             
+            result = currentDate;
+            let mailOptions = {
+                from: 'ygobanlistchecker@gmail.com',
+                to: 'Dominik.Kesim@gmail.com, P.staneker@freenet.de',
+                subject: 'Banlist update',
+                text: 'Banlist has not been updated. Current list is ' + result
+            }
+            
+            transporter.sendMail(mailOptions, (error, info) => {
+                if(error) {
+                    console.log('Error while sending mail...', error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                }
+            })
+            
         } else {
             console.log("There is no new banlist");
         }
         
-        result = currentDate;
-        let mailOptions = {
-            from: 'ygobanlistchecker@gmail.com',
-            to: 'Dominik.Kesim@gmail.com, P.staneker@freenet.de',
-            subject: 'Banlist update',
-            text: 'Banlist has not been updated. Current list is ' + result
-        }
-        
-        transporter.sendMail(mailOptions, (error, info) => {
-            if(error) {
-                console.log('Error while sending mail...', error);
-            } else {
-                console.log('Email sent: ' + info.response);
-            }
-        })
     });
 }, 300000);
 
