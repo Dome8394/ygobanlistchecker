@@ -1,6 +1,7 @@
 const express = require('express');
 const request = require('request');
 const cheerio = require('cheerio');
+const nodemailer = require('nodemailer');
 
 const port = process.env.PORT || 3000;
 const host = '0.0.0.0';
@@ -9,12 +10,29 @@ let oldDate = "Gültig ab 01/10/2021";
 let result;
 let url = 'https://www.yugioh-card.com/de/limited/';
 
+let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    secure: false,
+    requireTLS: true,
+    auth: {
+        user: 'ygobanlistchecker@gmail.com',
+        pass: 'xgzuwvzqbidjovwc'
+    }
+})
+
+let mailOptions = {
+    from: 'ygobanlistchecker@gmail.com',
+    to: 'Dominik.Kesim@gmail.com',
+    subject: 'Banlist update',
+    text: 'Banlist has not been updated.'
+}
+
 const app = express();
 
 let requestLoop = setInterval(() => {
     request({
         method: 'GET',
-        url: 'https://www.yugioh-card.com/de/limited/'
+        url: url
     }, (err, res, body) => {
         if (err) return console.error(err);
 
@@ -23,13 +41,28 @@ let requestLoop = setInterval(() => {
         currentDate = $('h2:contains("Gültig")').text();
         if (currentDate !== oldDate) {
             console.log("There is a new banlist!");
+            
         } else {
             console.log("There is no new banlist");
         }
         
         result = currentDate;
+        let mailOptions = {
+            from: 'ygobanlistchecker@gmail.com',
+            to: 'Dominik.Kesim@gmail.com, P.staneker@freenet.de',
+            subject: 'Banlist update',
+            text: 'Banlist has not been updated. Current list is ' + result
+        }
+        
+        transporter.sendMail(mailOptions, (error, info) => {
+            if(error) {
+                console.log('Error while sending mail...', error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        })
     });
-}, 300000);
+}, 60000);
 
 app.get('/', (req, res) => {
     res.send("<html><body><div><h1>" + result + "</h1></div></body></html>")
