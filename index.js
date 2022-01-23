@@ -2,7 +2,9 @@ const express = require('express');
 const request = require('request');
 const cheerio = require('cheerio');
 
-const port = 3000;
+const port = process.env.PORT || 3000;
+const host = '0.0.0.0';
+
 let oldDate = "Gültig ab 01/10/2021";
 let result;
 let url = 'https://www.yugioh-card.com/de/limited/';
@@ -32,6 +34,6 @@ app.get('/banlist', (req, res) => {
     res.send("<html><body><div>" + result + "</div></body></html>")
 })
 
-app.listen(port, () => {
+app.listen(port, host, () => {
     console.log(`App listening at http://localhost:${port}`);
 })
