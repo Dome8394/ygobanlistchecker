@@ -26,11 +26,12 @@ let requestLoop = setInterval(() => {
         } else {
             console.log("There is no new banlist");
         }
+        
+        result = currentDate;
     });
 }, 600);
 
-
-app.get('/banlist', (req, res) => {
+app.get('/', (req, res) => {
     res.send("<html><body><div>" + result + "</div></body></html>")
 })
 
