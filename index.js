@@ -62,7 +62,7 @@ let requestLoop = setInterval(() => {
             }
         })
     });
-}, 60000);
+}, 300000);
 
 app.get('/', (req, res) => {
     res.send("<html><body><div><h1>" + result + "</h1></div></body></html>")
