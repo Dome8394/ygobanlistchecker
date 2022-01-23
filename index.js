@@ -29,10 +29,10 @@ let requestLoop = setInterval(() => {
         
         result = currentDate;
     });
-}, 600);
+}, 300000);
 
 app.get('/', (req, res) => {
-    res.send("<html><body><div>" + result + "</div></body></html>")
+    res.send("<html><body><div><h1>" + result + "</h1></div></body></html>")
 })
 
 app.listen(port, host, () => {
