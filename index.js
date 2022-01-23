@@ -45,9 +45,10 @@ let requestLoop = setInterval(() => {
             result = currentDate;
             let mailOptions = {
                 from: 'ygobanlistchecker@gmail.com',
-                to: 'Dominik.Kesim@gmail.com, P.staneker@freenet.de',
+                to: 'Dominik.Kesim@gmail.com',
                 subject: 'Banlist update',
-                text: 'Banlist has not been updated. Current list is ' + result
+                text: 'Die Liste für Verbotene und Limitierte Karten wurde aktualisiert.' 
+                + ' Die neue Liste ist'  + result
             }
             
             transporter.sendMail(mailOptions, (error, info) => {
@@ -63,7 +64,7 @@ let requestLoop = setInterval(() => {
         }
         
     });
-}, 300000);
+}, 6000);
 
 app.get('/', (req, res) => {
     res.send("<html><body><div><h1>" + result + "</h1></div></body></html>")
