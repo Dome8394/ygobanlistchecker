@@ -5,13 +5,20 @@ const nodemailer = require('nodemailer');
 const DOMParser = require('dom-parser');
 let parser = new DOMParser();
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 const host = '0.0.0.0';
 
 let oldDate = "Gültig ab 01/10/2021";
 let result;
 let url = 'https://www.yugioh-card.com/de/limited/';
-let data = require('./data');
+
+
+const forbidden = [];
+const limited = [];
+const semiLimited = [];
+const unlimited = [];
+
+
 
 let transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -33,52 +40,89 @@ let requestLoop = setInterval(() => {
         if (err) return console.error(err);
 
         let $ = cheerio.load(body);
-        
-        
+
+
         let script = $('script[type=text/javascript]').html();
-        // let arrayScript = script.toArray();
-        // console.log(script.toArray().find(src => src.textContent.includes('jsonData')));
-        const json = script.match(/jsonData = JSON.parse(.*);/);
+
         eval(script);
-        // console.log(jsonData[2]);
-        console.log(Object.values(jsonData[0]).filter(content => content.prev === 1));
-        
-    //    const model = parser.parseFromString(body, 'text/html');
-    //    const scriptData = Array.from(model.querySelectorAll('script[type="text/javascript"]'));
-    //    const script = scriptData.find(src => src.textContent.includes('jsonData'));
-    //    eval(script.innerHTML);
        
-    //    console.log(Object.values(jsonData).flat().filter(t => t.frame));
+        const forbiddenCards = Object.values(jsonData[0]).filter(content => content.hasOwnProperty('prev'));
+        const limitedCards = Object.values(jsonData[1]).filter(content => content.hasOwnProperty('prev'));
+        const unlimitedCards = Object.values(jsonData[2]).filter(content => content.hasOwnProperty('prev'));
+        const semiLimitedCards = Object.values(jsonData[3]).filter(content => content.hasOwnProperty('prev'));
+
+        forbiddenCards.forEach((val, idx) => {
+
+            const entry = {
+                "name": val.nameeng,
+                "Previously at": val.prev
+            }
+
+            forbidden.push(entry);
+        });
+
+        limitedCards.forEach((val, idx) => {
+
+            const entry = {
+                "name": val.nameeng,
+                "prev": val.prev
+            }
+
+            limited.push(entry);
+        });
+
+        unlimitedCards.forEach((val, idx) => {
+
+            const entry = {
+                "name": val.nameeng,
+                "prev": val.prev
+            }
+
+            unlimited.push(entry);
+        });
         
+        semiLimitedCards.forEach((val, idx) => {
+
+            const entry = {
+                "name": val.nameeng,
+                "prev": val.prev
+            }
+
+            semiLimited.push(entry);
+        });
+
         currentDate = $('h2:contains("Gültig")').text();
         if (currentDate !== oldDate) {
             console.log("There is a new banlist!");
-            
+
             result = currentDate;
-            
+
             let mailOptions = {
                 from: 'ygobanlistchecker@gmail.com',
-                to: 'Dominik.Kesim@gmail.com, P.staneker@freenet.de, Paul.Astfalk@gmx.net, Steffen.ulitzsch@gmx.de, Dieter.daniel.j@gmail.com, biggie1893@outlook.de,' 
-                + 'M.wornath@gmx.de, robin.bauz@gmail.com, neufferchristoph@yahoo.de',
+                to: 'Dominik.Kesim@gmail.com, P.staneker@freenet.de, Paul.Astfalk@gmx.net, Steffen.ulitzsch@gmx.de, Dieter.daniel.j@gmail.com, biggie1893@outlook.de,'
+                 + 'M.wornath@gmx.de, robin.bauz@gmail.com, neufferchristoph@yahoo.de',
                 subject: 'Banlist update',
-                text: 'Die Liste für Verbotene und Limitierte Karten wurde aktualisiert.' 
-                + ' Die neue Liste ist '  + result + '. Link: ' + url
+                text: 'Die Liste für Verbotene und Limitierte Karten wurde aktualisiert. Die Liste ist ' + result
+                    + '. Link: ' + url + "\n"
+                    + "VERBOTEN" + "\n" + JSON.stringify(forbidden, null, 2) + "\n" + "LIMITIERT" + "\n" + JSON.stringify(limited, null, 2) + "\n"
+                    + "SEMI-LIMITIERT" + "\n" + JSON.stringify(semiLimited, null, 2) + "\n"
+                    + "NICHT LÄNGER AUF DER LISTE" + "\n" + JSON.stringify(unlimited, null, 2)
             }
-            
+
             transporter.sendMail(mailOptions, (error, info) => {
-                if(error) {
+                if (error) {
                     console.log('Error while sending mail...', error);
                 } else {
                     console.log('Email sent: ' + info.response);
                 }
             })
-            
+
         } else {
             console.log("There is no new banlist");
         }
-        
+
     });
-}, 1000);
+}, 300000);
 
 app.get('/', (req, res) => {
     res.send("<html><body><div><h1>" + result + "</h1></div></body></html>")
