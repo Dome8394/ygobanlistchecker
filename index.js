@@ -40,7 +40,8 @@ let requestLoop = setInterval(() => {
         // console.log(script.toArray().find(src => src.textContent.includes('jsonData')));
         const json = script.match(/jsonData = JSON.parse(.*);/);
         eval(script);
-        console.log(jsonData);
+        // console.log(jsonData[2]);
+        console.log(Object.values(jsonData[0]).filter(content => content.prev === 1));
         
     //    const model = parser.parseFromString(body, 'text/html');
     //    const scriptData = Array.from(model.querySelectorAll('script[type="text/javascript"]'));
@@ -77,7 +78,7 @@ let requestLoop = setInterval(() => {
         }
         
     });
-}, 300000);
+}, 1000);
 
 app.get('/', (req, res) => {
     res.send("<html><body><div><h1>" + result + "</h1></div></body></html>")
