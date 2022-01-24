@@ -13,13 +13,6 @@ let result;
 let url = 'https://www.yugioh-card.com/de/limited/';
 
 
-const forbidden = [];
-const limited = [];
-const semiLimited = [];
-const unlimited = [];
-
-
-
 let transporter = nodemailer.createTransport({
     service: 'gmail',
     secure: false,
@@ -41,56 +34,6 @@ let requestLoop = setInterval(() => {
 
         let $ = cheerio.load(body);
 
-
-        let script = $('script[type=text/javascript]').html();
-
-        eval(script);
-       
-        const forbiddenCards = Object.values(jsonData[0]).filter(content => content.hasOwnProperty('prev'));
-        const limitedCards = Object.values(jsonData[1]).filter(content => content.hasOwnProperty('prev'));
-        const unlimitedCards = Object.values(jsonData[2]).filter(content => content.hasOwnProperty('prev'));
-        const semiLimitedCards = Object.values(jsonData[3]).filter(content => content.hasOwnProperty('prev'));
-
-        forbiddenCards.forEach((val, idx) => {
-
-            const entry = {
-                "name": val.nameeng,
-                "Previously at": val.prev
-            }
-
-            forbidden.push(entry);
-        });
-
-        limitedCards.forEach((val, idx) => {
-
-            const entry = {
-                "name": val.nameeng,
-                "prev": val.prev
-            }
-
-            limited.push(entry);
-        });
-
-        unlimitedCards.forEach((val, idx) => {
-
-            const entry = {
-                "name": val.nameeng,
-                "prev": val.prev
-            }
-
-            unlimited.push(entry);
-        });
-        
-        semiLimitedCards.forEach((val, idx) => {
-
-            const entry = {
-                "name": val.nameeng,
-                "prev": val.prev
-            }
-
-            semiLimited.push(entry);
-        });
-
         currentDate = $('h2:contains("Gültig")').text();
         if (currentDate !== oldDate) {
             console.log("There is a new banlist!");
@@ -104,9 +47,6 @@ let requestLoop = setInterval(() => {
                 subject: 'Banlist update',
                 text: 'Die Liste für Verbotene und Limitierte Karten wurde aktualisiert. Die Liste ist ' + result
                     + '. Link: ' + url + "\n"
-                    + "VERBOTEN" + "\n" + JSON.stringify(forbidden, null, 2) + "\n" + "LIMITIERT" + "\n" + JSON.stringify(limited, null, 2) + "\n"
-                    + "SEMI-LIMITIERT" + "\n" + JSON.stringify(semiLimited, null, 2) + "\n"
-                    + "NICHT LÄNGER AUF DER LISTE" + "\n" + JSON.stringify(unlimited, null, 2)
             }
 
             transporter.sendMail(mailOptions, (error, info) => {
