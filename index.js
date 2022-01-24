@@ -42,7 +42,7 @@ let requestLoop = setInterval(() => {
         let script = $('script[type=text/javascript]').html();
 
         eval(script);
-        
+
         const forbiddenCards = Object.values(jsonData[0]).filter(content => content.hasOwnProperty('prev'));
         const limitedCards = Object.values(jsonData[1]).filter(content => content.hasOwnProperty('prev'));
         const unlimitedCards = Object.values(jsonData[2]).filter(content => content.hasOwnProperty('prev'));
@@ -55,7 +55,16 @@ let requestLoop = setInterval(() => {
                 "Previously at": val.prev
             }
 
-            forbidden.push(entry);
+            if (forbidden.length > 0) {
+                forbidden.forEach((value, idx) => {
+                    if (!Object.values(value).includes(val.nameeng)) {
+                        forbidden.push(entry);
+                    }
+                })
+            } else {
+                forbidden.push(entry);
+            }
+
         });
 
         limitedCards.forEach((val, idx) => {
@@ -65,7 +74,16 @@ let requestLoop = setInterval(() => {
                 "prev": val.prev
             }
 
-            limited.push(entry);
+            if (limited.length > 0) {
+                limited.forEach((value, idx) => {
+                    if (!Object.values(value).includes(val.nameeng)) {
+                        limited.push(entry);
+                    }
+                })
+            } else {
+                limited.push(entry);
+            }
+
         });
 
         unlimitedCards.forEach((val, idx) => {
@@ -75,7 +93,16 @@ let requestLoop = setInterval(() => {
                 "prev": val.prev
             }
 
-            unlimited.push(entry);
+            if (unlimited.length > 0) {
+                unlimited.forEach((value, idx) => {
+                    if (!Object.values(value).includes(val.nameeng)) {
+                        unlimited.push(entry);
+                    }
+                })
+            } else {
+                unlimited.push(entry);
+            }
+
         });
 
         semiLimitedCards.forEach((val, idx) => {
@@ -85,21 +112,31 @@ let requestLoop = setInterval(() => {
                 "prev": val.prev
             }
 
-            semiLimited.push(entry);
+            if (semiLimited.length > 0) {
+                semiLimited.forEach((value, idx) => {
+                    if (!Object.values(value).includes(val.nameeng)) {
+                        semiLimited.push(entry);
+                    }
+                })
+            } else {
+                semiLimited.push(entry);
+            }
         });
-        
+
         console.log(forbidden);
+        console.log(limited);
+        console.log(semiLimited);
+        console.log(unlimited);
 
         currentDate = $('h2:contains("Gültig")').text();
-        if (currentDate !== oldDate) {
+        if (currentDate === oldDate) {
             console.log("There is a new banlist!");
 
             result = currentDate;
 
             let mailOptions = {
                 from: 'ygobanlistchecker@gmail.com',
-                to: 'Dominik.Kesim@gmail.com, P.staneker@freenet.de, Paul.Astfalk@gmx.net, Steffen.ulitzsch@gmx.de, Dieter.daniel.j@gmail.com, biggie1893@outlook.de,'
-                 + 'M.wornath@gmx.de, robin.bauz@gmail.com, neufferchristoph@yahoo.de',
+                to: 'Dominik.Kesim@gmail.com',
                 subject: 'Banlist update',
                 text: 'Die Liste für Verbotene und Limitierte Karten wurde aktualisiert. Die Liste ist ' + result
                     + '. Link: ' + url + "\n"
@@ -113,6 +150,10 @@ let requestLoop = setInterval(() => {
                     console.log('Error while sending mail...', error);
                 } else {
                     console.log('Email sent: ' + info.response);
+                    forbidden = [];
+                    limited = [];
+                    unlimited = [];
+                    semiLimited = [];
                 }
             })
 
