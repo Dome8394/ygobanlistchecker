@@ -48,89 +48,84 @@ let requestLoop = setInterval(() => {
         const unlimitedCards = Object.values(jsonData[2]).filter(content => content.hasOwnProperty('prev'));
         const semiLimitedCards = Object.values(jsonData[3]).filter(content => content.hasOwnProperty('prev'));
 
-        forbiddenCards.forEach((val, idx) => {
-
-            const entry = {
-                "name": val.nameeng,
-                "Previously at": val.prev
-            }
-
-            if (forbidden.length > 0) {
-                forbidden.forEach((value, idx) => {
-                    if (!Object.values(value).includes(val.nameeng)) {
-                        forbidden.push(entry);
-                    }
-                })
-            } else {
-                forbidden.push(entry);
-            }
-
-        });
-
-        limitedCards.forEach((val, idx) => {
-
-            const entry = {
-                "name": val.nameeng,
-                "prev": val.prev
-            }
-
-            if (limited.length > 0) {
-                limited.forEach((value, idx) => {
-                    if (!Object.values(value).includes(val.nameeng)) {
-                        limited.push(entry);
-                    }
-                })
-            } else {
-                limited.push(entry);
-            }
-
-        });
-
-        unlimitedCards.forEach((val, idx) => {
-
-            const entry = {
-                "name": val.nameeng,
-                "prev": val.prev
-            }
-
-            if (unlimited.length > 0) {
-                unlimited.forEach((value, idx) => {
-                    if (!Object.values(value).includes(val.nameeng)) {
-                        unlimited.push(entry);
-                    }
-                })
-            } else {
-                unlimited.push(entry);
-            }
-
-        });
-
-        semiLimitedCards.forEach((val, idx) => {
-
-            const entry = {
-                "name": val.nameeng,
-                "prev": val.prev
-            }
-
-            if (semiLimited.length > 0) {
-                semiLimited.forEach((value, idx) => {
-                    if (!Object.values(value).includes(val.nameeng)) {
-                        semiLimited.push(entry);
-                    }
-                })
-            } else {
-                semiLimited.push(entry);
-            }
-        });
-
-        console.log(forbidden);
-        console.log(limited);
-        console.log(semiLimited);
-        console.log(unlimited);
-
         currentDate = $('h2:contains("Gültig")').text();
         if (currentDate !== oldDate) {
             console.log("There is a new banlist!");
+
+            forbiddenCards.forEach((val, idx) => {
+
+                const entry = {
+                    "name": val.nameeng,
+                    "Previously at": val.prev
+                }
+
+                if (forbidden.length > 0) {
+                    forbidden.forEach((value, idx) => {
+                        if (!Object.values(value).includes(val.nameeng)) {
+                            forbidden.push(entry);
+                        }
+                    })
+                } else {
+                    forbidden.push(entry);
+                }
+
+            });
+
+            limitedCards.forEach((val, idx) => {
+
+                const entry = {
+                    "name": val.nameeng,
+                    "prev": val.prev
+                }
+
+                if (limited.length > 0) {
+                    limited.forEach((value, idx) => {
+                        if (!Object.values(value).includes(val.nameeng)) {
+                            limited.push(entry);
+                        }
+                    })
+                } else {
+                    limited.push(entry);
+                }
+
+            });
+
+            unlimitedCards.forEach((val, idx) => {
+
+                const entry = {
+                    "name": val.nameeng,
+                    "prev": val.prev
+                }
+
+                if (unlimited.length > 0) {
+                    unlimited.forEach((value, idx) => {
+                        if (!Object.values(value).includes(val.nameeng)) {
+                            unlimited.push(entry);
+                        }
+                    })
+                } else {
+                    unlimited.push(entry);
+                }
+
+            });
+
+            semiLimitedCards.forEach((val, idx) => {
+
+                const entry = {
+                    "name": val.nameeng,
+                    "prev": val.prev
+                }
+
+                if (semiLimited.length > 0) {
+                    semiLimited.forEach((value, idx) => {
+                        if (!Object.values(value).includes(val.nameeng)) {
+                            semiLimited.push(entry);
+                        }
+                    })
+                } else {
+                    semiLimited.push(entry);
+                }
+            });
 
             result = currentDate;
 
@@ -155,7 +150,7 @@ let requestLoop = setInterval(() => {
                     unlimited = [];
                     semiLimited = [];
                 }
-            })
+            });
 
         } else {
             console.log("There is no new banlist");
