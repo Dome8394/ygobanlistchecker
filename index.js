@@ -46,7 +46,7 @@ let requestLoop = setInterval(() => {
             let mailOptions = {
                 from: 'ygobanlistchecker@gmail.com',
                 // P.staneker@freenet.de, Paul.Astfalk@gmx.net
-                to: 'Dominik.Kesim@gmail.com, P.staneker@freenet.de, Paul.Astfalk@gmx.net',
+                to: 'Dominik.Kesim@gmail.com, P.staneker@freenet.de, Paul.Astfalk@gmx.net, Steffen.ulitzsch@gmx.de, Dieter.daniel.j@gmail.com',
                 subject: 'Banlist update',
                 text: 'Die Liste für Verbotene und Limitierte Karten wurde aktualisiert.' 
                 + ' Die neue Liste ist'  + result
