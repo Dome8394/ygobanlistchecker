@@ -103,6 +103,9 @@ let requestLoop = setInterval(() => {
                 subject: 'Banlist update',
                 text: 'Die Liste für Verbotene und Limitierte Karten wurde aktualisiert. Die Liste ist ' + result
                     + '. Link: ' + url + "\n"
+                    + "VERBOTEN" + "\n" + JSON.stringify(forbidden, null, 2) + "\n" + "LIMITIERT" + "\n" + JSON.stringify(limited, null, 2) + "\n"
+                    + "SEMI-LIMITIERT" + "\n" + JSON.stringify(semiLimited, null, 2) + "\n"
+                    + "NICHT LÄNGER AUF DER LISTE" + "\n" + JSON.stringify(unlimited, null, 2)
             }
 
             transporter.sendMail(mailOptions, (error, info) => {
