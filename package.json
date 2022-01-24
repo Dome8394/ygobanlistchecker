@@ -2,6 +2,9 @@
   "name": "banlist_checker_api",
   "version": "1.0.0",
   "description": "A banlist api that curls the yugioh banlist if there are any changes",
+  "engines": {
+    "node": "16.x"
+  },
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
