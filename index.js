@@ -2,6 +2,8 @@ const express = require('express');
 const request = require('request');
 const cheerio = require('cheerio');
 const nodemailer = require('nodemailer');
+const DOMParser = require('dom-parser');
+let parser = new DOMParser();
 
 const port = process.env.PORT || 3000;
 const host = '0.0.0.0';
@@ -9,6 +11,7 @@ const host = '0.0.0.0';
 let oldDate = "Gültig ab 01/10/2021";
 let result;
 let url = 'https://www.yugioh-card.com/de/limited/';
+let data = require('./data');
 
 let transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -20,13 +23,6 @@ let transporter = nodemailer.createTransport({
     }
 })
 
-let mailOptions = {
-    from: 'ygobanlistchecker@gmail.com',
-    to: 'Dominik.Kesim@gmail.com',
-    subject: 'Banlist update',
-    text: 'Banlist has not been updated.'
-}
-
 const app = express();
 
 let requestLoop = setInterval(() => {
@@ -37,9 +33,22 @@ let requestLoop = setInterval(() => {
         if (err) return console.error(err);
 
         let $ = cheerio.load(body);
-        let html = $.html();
-    
-
+        
+        
+        let script = $('script[type=text/javascript]').html();
+        // let arrayScript = script.toArray();
+        // console.log(script.toArray().find(src => src.textContent.includes('jsonData')));
+        const json = script.match(/jsonData = JSON.parse(.*);/);
+        eval(script);
+        console.log(jsonData);
+        
+    //    const model = parser.parseFromString(body, 'text/html');
+    //    const scriptData = Array.from(model.querySelectorAll('script[type="text/javascript"]'));
+    //    const script = scriptData.find(src => src.textContent.includes('jsonData'));
+    //    eval(script.innerHTML);
+       
+    //    console.log(Object.values(jsonData).flat().filter(t => t.frame));
+        
         currentDate = $('h2:contains("Gültig")').text();
         if (currentDate !== oldDate) {
             console.log("There is a new banlist!");
@@ -48,7 +57,6 @@ let requestLoop = setInterval(() => {
             
             let mailOptions = {
                 from: 'ygobanlistchecker@gmail.com',
-                // P.staneker@freenet.de, Paul.Astfalk@gmx.net
                 to: 'Dominik.Kesim@gmail.com, P.staneker@freenet.de, Paul.Astfalk@gmx.net, Steffen.ulitzsch@gmx.de, Dieter.daniel.j@gmail.com, biggie1893@outlook.de,' 
                 + 'M.wornath@gmx.de, robin.bauz@gmail.com, neufferchristoph@yahoo.de',
                 subject: 'Banlist update',
