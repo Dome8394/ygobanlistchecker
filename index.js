@@ -33,6 +33,13 @@ let requestLoop = setInterval(() => {
         if (err) return console.error(err);
 
         let $ = cheerio.load(body);
+        
+
+        let script = $('script[type=text/javascript]').html();
+
+        eval(script);
+        
+        console.log(jsonData);
 
         currentDate = $('h2:contains("Gültig")').text();
         if (currentDate !== oldDate) {
