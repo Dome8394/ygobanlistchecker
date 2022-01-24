@@ -8,6 +8,11 @@ let parser = new DOMParser();
 const port = process.env.PORT || 3000;
 const host = '0.0.0.0';
 
+const forbidden = [];
+const limited = [];
+const semiLimited = [];
+const unlimited = [];
+
 let oldDate = "Gültig ab 01/10/2021";
 let result;
 let url = 'https://www.yugioh-card.com/de/limited/';
@@ -33,13 +38,57 @@ let requestLoop = setInterval(() => {
         if (err) return console.error(err);
 
         let $ = cheerio.load(body);
-        
 
         let script = $('script[type=text/javascript]').html();
 
         eval(script);
         
-        console.log(jsonData);
+        const forbiddenCards = Object.values(jsonData[0]).filter(content => content.hasOwnProperty('prev'));
+        const limitedCards = Object.values(jsonData[1]).filter(content => content.hasOwnProperty('prev'));
+        const unlimitedCards = Object.values(jsonData[2]).filter(content => content.hasOwnProperty('prev'));
+        const semiLimitedCards = Object.values(jsonData[3]).filter(content => content.hasOwnProperty('prev'));
+
+        forbiddenCards.forEach((val, idx) => {
+
+            const entry = {
+                "name": val.nameeng,
+                "Previously at": val.prev
+            }
+
+            forbidden.push(entry);
+        });
+
+        limitedCards.forEach((val, idx) => {
+
+            const entry = {
+                "name": val.nameeng,
+                "prev": val.prev
+            }
+
+            limited.push(entry);
+        });
+
+        unlimitedCards.forEach((val, idx) => {
+
+            const entry = {
+                "name": val.nameeng,
+                "prev": val.prev
+            }
+
+            unlimited.push(entry);
+        });
+
+        semiLimitedCards.forEach((val, idx) => {
+
+            const entry = {
+                "name": val.nameeng,
+                "prev": val.prev
+            }
+
+            semiLimited.push(entry);
+        });
+        
+        console.log(forbidden);
 
         currentDate = $('h2:contains("Gültig")').text();
         if (currentDate !== oldDate) {
