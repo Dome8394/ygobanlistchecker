@@ -90,6 +90,8 @@ let requestLoop = setInterval(() => {
 
             semiLimited.push(entry);
         });
+        
+        console.log(forbidden);
 
         currentDate = $('h2:contains("Gültig")').text();
         if (currentDate !== oldDate) {
@@ -122,7 +124,7 @@ let requestLoop = setInterval(() => {
         }
 
     });
-}, 300000);
+}, 5000);
 
 app.get('/', (req, res) => {
     res.send("<html><body><div><h1>" + result + "</h1></div></body></html>")
