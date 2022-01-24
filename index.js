@@ -37,12 +37,15 @@ let requestLoop = setInterval(() => {
         if (err) return console.error(err);
 
         let $ = cheerio.load(body);
+        let html = $.html();
+    
 
         currentDate = $('h2:contains("Gültig")').text();
         if (currentDate !== oldDate) {
             console.log("There is a new banlist!");
             
             result = currentDate;
+            
             let mailOptions = {
                 from: 'ygobanlistchecker@gmail.com',
                 // P.staneker@freenet.de, Paul.Astfalk@gmx.net
@@ -50,7 +53,7 @@ let requestLoop = setInterval(() => {
                 + 'M.wornath@gmx.de, robin.bauz@gmail.com, neufferchristoph@yahoo.de',
                 subject: 'Banlist update',
                 text: 'Die Liste für Verbotene und Limitierte Karten wurde aktualisiert.' 
-                + ' Die neue Liste ist'  + result
+                + ' Die neue Liste ist '  + result + '. Link: ' + url
             }
             
             transporter.sendMail(mailOptions, (error, info) => {
