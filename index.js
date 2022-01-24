@@ -129,7 +129,7 @@ let requestLoop = setInterval(() => {
         console.log(unlimited);
 
         currentDate = $('h2:contains("Gültig")').text();
-        if (currentDate === oldDate) {
+        if (currentDate !== oldDate) {
             console.log("There is a new banlist!");
 
             result = currentDate;
