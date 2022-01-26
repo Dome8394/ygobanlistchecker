@@ -30,6 +30,8 @@ let transporter = nodemailer.createTransport({
 
 const app = express();
 
+app.set('view engine', 'pug');
+
 let requestLoop = setInterval(() => {
     request({
         method: 'GET',
@@ -163,10 +165,14 @@ let requestLoop = setInterval(() => {
     });
 }, 300000);
 
+
+
 app.get('/', (req, res) => {
     console.log(result);
-    res.send("<html><body><div><h1>" + result + "</h1></div></body></html>")
-})
+    res.render('index', {
+        title: 'Hello pug!'
+    });
+});
 
 app.listen(port, host, () => {
     console.log(`App listening at http://localhost:${port}`);
