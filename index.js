@@ -49,6 +49,7 @@ let requestLoop = setInterval(() => {
         const semiLimitedCards = Object.values(jsonData[3]).filter(content => content.hasOwnProperty('prev'));
 
         currentDate = $('h2:contains("Gültig")').text();
+        console.log(currentDate);
         if (currentDate !== oldDate) {
             console.log("There is a new banlist!");
 
