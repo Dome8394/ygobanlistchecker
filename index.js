@@ -52,7 +52,7 @@ let requestLoop = setInterval(() => {
 
         currentDate = $('h2:contains("Gültig")').text();
         result = currentDate;
-        
+
         console.log(currentDate);
         if (currentDate !== oldDate) {
             console.log("There is a new banlist!");
@@ -136,8 +136,8 @@ let requestLoop = setInterval(() => {
 
             let mailOptions = {
                 from: 'ygobanlistchecker@gmail.com',
-                to: 'Dominik.Kesim@gmail.com, P.staneker@freenet.de, neufferchristoph@yahoo.de, M.Wornath@gmx.de,' 
-                +  'robin.bauz@gmail.com, steffen.ulitzsch@gmx.de, Dieter.daniel.j@gmail.com, Paul.Astfalk@gmx.net, biggie1893@outlook.de',
+                to: 'Dominik.Kesim@gmail.com, P.staneker@freenet.de, neufferchristoph@yahoo.de, M.Wornath@gmx.de,'
+                    + 'robin.bauz@gmail.com, steffen.ulitzsch@gmx.de, Dieter.daniel.j@gmail.com, Paul.Astfalk@gmx.net, biggie1893@outlook.de',
                 subject: 'Banlist update',
                 text: 'Die Liste für Verbotene und Limitierte Karten wurde aktualisiert. Die Liste ist ' + result
                     + '. Link: ' + url + "\n"
@@ -168,10 +168,120 @@ let requestLoop = setInterval(() => {
 
 
 app.get('/', (req, res) => {
-    console.log(result);
-    res.render('index', {
-        title: 'Hello pug!'
+    
+    const forbidden = [];
+    const limited = [];
+    const semiLimited = [];
+    const unlimited = [];
+    
+    request({ method: 'GET', url: url }, (error, response, body) => {
+
+        console.log("Test");
+        console.log("Test");
+        
+        if (error) {
+            res.render('error', {
+                error_msg: error
+            });
+        }
+
+        let $ = cheerio.load(body);
+        currentDate = $('h2:contains("Gültig")').text();
+        
+        let script = $('script[type=text/javascript]').html();
+
+        eval(script);
+
+        const forbiddenCards = Object.values(jsonData[0]).filter(content => content.hasOwnProperty('prev'));
+        const limitedCards = Object.values(jsonData[1]).filter(content => content.hasOwnProperty('prev'));
+        const unlimitedCards = Object.values(jsonData[2]).filter(content => content.hasOwnProperty('prev'));
+        const semiLimitedCards = Object.values(jsonData[3]).filter(content => content.hasOwnProperty('prev'));
+
+
+        forbiddenCards.forEach((val, idx) => {
+
+            const entry = {
+                "name": val.nameeng,
+                "Previously at": val.prev
+            }
+
+            if (forbidden.length > 0) {
+                forbidden.forEach((value, idx) => {
+                    if (!Object.values(value).includes(val.nameeng)) {
+                        forbidden.push(entry);
+                    }
+                })
+            } else {
+                forbidden.push(entry);
+            }
+
+        });
+
+        limitedCards.forEach((val, idx) => {
+
+            const entry = {
+                "name": val.nameeng,
+                "prev": val.prev
+            }
+
+            if (limited.length > 0) {
+                limited.forEach((value, idx) => {
+                    if (!Object.values(value).includes(val.nameeng)) {
+                        limited.push(entry);
+                    }
+                })
+            } else {
+                limited.push(entry);
+            }
+
+        });
+
+        unlimitedCards.forEach((val, idx) => {
+
+            const entry = {
+                "name": val.nameeng,
+                "prev": val.prev
+            }
+
+            if (unlimited.length > 0) {
+                unlimited.forEach((value, idx) => {
+                    if (!Object.values(value).includes(val.nameeng)) {
+                        unlimited.push(entry);
+                    }
+                })
+            } else {
+                unlimited.push(entry);
+            }
+
+        });
+
+        semiLimitedCards.forEach((val, idx) => {
+
+            const entry = {
+                "name": val.nameeng,
+                "prev": val.prev
+            }
+
+            if (semiLimited.length > 0) {
+                semiLimited.forEach((value, idx) => {
+                    if (!Object.values(value).includes(val.nameeng)) {
+                        semiLimited.push(entry);
+                    }
+                })
+            } else {
+                semiLimited.push(entry);
+            }
+        });
+        
+        console.log("Forbidden", forbidden);
+
+        res.render('index', {
+            current_banlist_date: currentDate,
+            forbidden: forbidden
+        });
+
     });
+
 });
 
 app.listen(port, host, () => {
