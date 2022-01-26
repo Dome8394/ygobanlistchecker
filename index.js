@@ -164,6 +164,7 @@ let requestLoop = setInterval(() => {
 }, 300000);
 
 app.get('/', (req, res) => {
+    console.log(result);
     res.send("<html><body><div><h1>" + result + "</h1></div></body></html>")
 })
 
