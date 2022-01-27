@@ -144,29 +144,29 @@ let requestLoop = setInterval(() => {
 
             result = currentDate;
 
-            let mailOptions = {
-                from: 'ygobanlistchecker@gmail.com',
-                to: 'Dominik.Kesim@gmail.com, P.staneker@freenet.de, neufferchristoph@yahoo.de, M.Wornath@gmx.de,'
-                    + 'robin.bauz@gmail.com, steffen.ulitzsch@gmx.de, Dieter.daniel.j@gmail.com, Paul.Astfalk@gmx.net, biggie1893@outlook.de',
-                subject: 'Banlist update',
-                text: 'Die Liste für Verbotene und Limitierte Karten wurde aktualisiert. Die Liste ist ' + result
-                    + '. Link: ' + url + "\n"
-                    + "VERBOTEN" + "\n" + JSON.stringify(forbidden, null, 2) + "\n" + "LIMITIERT" + "\n" + JSON.stringify(limited, null, 2) + "\n"
-                    + "SEMI-LIMITIERT" + "\n" + JSON.stringify(semiLimited, null, 2) + "\n"
-                    + "NICHT LÄNGER AUF DER LISTE" + "\n" + JSON.stringify(unlimited, null, 2)
-            }
+            // let mailOptions = {
+            //     from: 'ygobanlistchecker@gmail.com',
+            //     to: 'Dominik.Kesim@gmail.com, P.staneker@freenet.de, neufferchristoph@yahoo.de, M.Wornath@gmx.de,'
+            //         + 'robin.bauz@gmail.com, steffen.ulitzsch@gmx.de, Dieter.daniel.j@gmail.com, Paul.Astfalk@gmx.net, biggie1893@outlook.de',
+            //     subject: 'Banlist update',
+            //     text: 'Die Liste für Verbotene und Limitierte Karten wurde aktualisiert. Die Liste ist ' + result
+            //         + '. Link: ' + url + "\n"
+            //         + "VERBOTEN" + "\n" + JSON.stringify(forbidden, null, 2) + "\n" + "LIMITIERT" + "\n" + JSON.stringify(limited, null, 2) + "\n"
+            //         + "SEMI-LIMITIERT" + "\n" + JSON.stringify(semiLimited, null, 2) + "\n"
+            //         + "NICHT LÄNGER AUF DER LISTE" + "\n" + JSON.stringify(unlimited, null, 2)
+            // }
 
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    console.log('Error while sending mail...', error);
-                } else {
-                    console.log('Email sent: ' + info.response);
-                    forbidden = [];
-                    limited = [];
-                    unlimited = [];
-                    semiLimited = [];
-                }
-            });
+            // transporter.sendMail(mailOptions, (error, info) => {
+            //     if (error) {
+            //         console.log('Error while sending mail...', error);
+            //     } else {
+            //         console.log('Email sent: ' + info.response);
+            //         forbidden = [];
+            //         limited = [];
+            //         unlimited = [];
+            //         semiLimited = [];
+            //     }
+            // });
 
         } else {
             console.log("There is no new banlist");
