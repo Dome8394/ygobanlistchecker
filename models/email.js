@@ -9,9 +9,10 @@ const EmailSchema = new Schema({
         type: Boolean,
         default: false
     },
-    required: true
 })
 
 const Email = mongoose.model('Email', EmailSchema);
 
 module.exports = Email;
+
+
