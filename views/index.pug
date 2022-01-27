@@ -17,13 +17,33 @@ html(lang='en')
                 width: 100%;
                 display: flex;
                 flex-direction: column;
-                justify-content: center;
+                justify-content: space-between;
                 align-content: center;
+                align-items: center;
             }
             #divider {
                 width: 50%;
                 height: 1px;
                 background-color: black;
+            }
+            .cards-table {
+                width: 75%;
+                background-color: #F2F2F2;
+            }
+            table {
+                margin: 3%;
+            }
+            thead {
+                background-color: #95A5A6;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                border: none;
+            }
+            td {
+                text-align: center;
+            }
+            tr {
+                border: none;
             }
             p {
                 text-align: center;
@@ -34,7 +54,54 @@ html(lang='en')
         hr#divider
         #container.col  
             p= current_banlist_date 
-            //- ul 
-            //-  each val, key in forbidden 
-            //-     li= val
-                
+            table.cards-table(cellpadding="0" cellmargin="0")
+                thead 
+                    tr 
+                        th Card Name 
+                        th Previously at 
+                        th Limited to 
+                    tbody 
+                        each val, key in forbidden ? forbidden : []
+                            tr 
+                                td #{val.name} 
+                                td #{val.prev}
+                                td 0
+            
+            table.cards-table(cellpadding="0" cellmargin="0")
+                thead 
+                    tr 
+                        th Card Name 
+                        th Previously at 
+                        th Limited to 
+                    tbody 
+                        each val, key in limited ? limited : []
+                            tr 
+                                td #{val.name} 
+                                td #{val.prev}
+                                td 1
+                                
+            table.cards-table(cellpadding="0" cellmargin="0")
+                thead 
+                    tr 
+                        th Card Name 
+                        th Previously at 
+                        th Limited to 
+                    tbody 
+                        each val, key in semiLimited ? semiLimited : []
+                            tr 
+                                td #{val.name} 
+                                td #{val.prev}
+                                td 2
+            
+            table.cards-table(cellpadding="0" cellmargin="0")
+                thead 
+                    tr 
+                        th Card Name 
+                        th Previously at 
+                        th Status 
+                    tbody 
+                        each val, key in unlimited ? unlimited : []
+                            tr 
+                                td #{val.name} 
+                                td #{val.prev}
+                                td No longer on the list

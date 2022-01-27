@@ -53,7 +53,6 @@ let requestLoop = setInterval(() => {
         currentDate = $('h2:contains("Gültig")').text();
         result = currentDate;
 
-        console.log(currentDate);
         if (currentDate !== oldDate) {
             console.log("There is a new banlist!");
 
@@ -176,9 +175,6 @@ app.get('/', (req, res) => {
     
     request({ method: 'GET', url: url }, (error, response, body) => {
 
-        console.log("Test");
-        console.log("Test");
-        
         if (error) {
             res.render('error', {
                 error_msg: error
@@ -194,15 +190,15 @@ app.get('/', (req, res) => {
 
         const forbiddenCards = Object.values(jsonData[0]).filter(content => content.hasOwnProperty('prev'));
         const limitedCards = Object.values(jsonData[1]).filter(content => content.hasOwnProperty('prev'));
-        const unlimitedCards = Object.values(jsonData[2]).filter(content => content.hasOwnProperty('prev'));
-        const semiLimitedCards = Object.values(jsonData[3]).filter(content => content.hasOwnProperty('prev'));
+        const unlimitedCards = Object.values(jsonData[3]).filter(content => content.hasOwnProperty('prev'));
+        const semiLimitedCards = Object.values(jsonData[2]).filter(content => content.hasOwnProperty('prev'));
 
 
         forbiddenCards.forEach((val, idx) => {
 
             const entry = {
                 "name": val.nameeng,
-                "Previously at": val.prev
+                "prev": val.prev
             }
 
             if (forbidden.length > 0) {
@@ -273,11 +269,12 @@ app.get('/', (req, res) => {
             }
         });
         
-        console.log("Forbidden", forbidden);
-
         res.render('index', {
             current_banlist_date: currentDate,
-            forbidden: forbidden
+            forbidden: forbidden,
+            limited: limited,
+            semiLimited: semiLimited,
+            unlimited: unlimited
         });
 
     });
