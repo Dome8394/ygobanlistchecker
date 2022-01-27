@@ -7,6 +7,7 @@ const path = require('path');
 
 const connection = require('./config/db');
 const email = require('./routes/Email');
+const index = require('./routes/Index');
 
 const port = process.env.PORT || 3000;
 const host = '0.0.0.0';
@@ -32,12 +33,13 @@ let transporter = nodemailer.createTransport({
 })
 
 const app = express();
-(async () => await connection())();
+// (async () => await connection())();
 
 app.set('views', path.join(__dirname, './views'));
 app.set('view engine', 'pug');
 
 app.use('/add/newsletter', email);
+// app.use('/', index);
 
 app.use(express.json());
 
