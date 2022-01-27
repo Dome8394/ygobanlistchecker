@@ -3,57 +3,27 @@ html(lang='en')
     head
         meta(charset='utf-8')
         title= 'Ygo Banlist Checker API'
-        style.
-            h1, h2 { 
-                text-align: center;
-                font-style: normal;
-                font-size: 3rem;
-            }
-            
-            h2 {
-                font-size: 1.5rem;
-            }
-            #container {
-                width: 100%;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                align-content: center;
-                align-items: center;
-            }
-            #divider {
-                width: 50%;
-                height: 1px;
-                background-color: black;
-            }
-            .cards-table {
-                width: 75%;
-                background-color: #F2F2F2;
-            }
-            table {
-                margin: 3%;
-            }
-            thead {
-                background-color: #95A5A6;
-                text-transform: uppercase;
-                letter-spacing: 0.1em;
-                border: none;
-            }
-            td {
-                text-align: center;
-            }
-            tr {
-                border: none;
-            }
-            p {
-                text-align: center;
-            }
+        style   
+            include index.css 
+        link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css')
+        script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js' integrity='sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM' crossorigin='anonymous')
     body
-        h1.center= 'Ygo Banlist Checker API'
-        h2.center= 'Get your latest banlist update!' 
-        hr#divider
+        nav.navbar.navbar-expand-lg.navbar-light
+            .container-fluid 
+                span.navbar-brand#navbar-title Yu-Gi-Oh! Banlist Checker 
+        #header.col
+            //- h1.center= 'Ygo Banlist Checker API'
+            h1.center= 'Get your latest banlist update!' 
+            .row 
+                .input-group.mb-3.mt-3#email
+                    span.input-group-text @
+                    input.form-control(placeholder="Trage dich hier ein!" type="text") 
+                button(type="button")#button.btn.btn-success.mx-3 Senden
+            hr#divider
         #container.col  
-            p= current_banlist_date 
+            #date 
+                //- - console.log(current_banlist_date.substring(current_banlist_date.indexOf('ab')+3, current_banlist_date.length));
+                span.badge= current_banlist_date 
             table.cards-table(cellpadding="0" cellmargin="0")
                 thead 
                     tr 

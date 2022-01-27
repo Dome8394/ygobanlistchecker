@@ -3,7 +3,7 @@ const request = require('request');
 const cheerio = require('cheerio');
 const nodemailer = require('nodemailer');
 const DOMParser = require('dom-parser');
-let parser = new DOMParser();
+const path = require('path');
 
 const port = process.env.PORT || 3000;
 const host = '0.0.0.0';
@@ -30,6 +30,7 @@ let transporter = nodemailer.createTransport({
 
 const app = express();
 
+app.set('views', path.join(__dirname, './views'));
 app.set('view engine', 'pug');
 
 let requestLoop = setInterval(() => {

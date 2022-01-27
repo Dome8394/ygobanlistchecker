@@ -22,6 +22,10 @@
     "request": "^2.88.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "css-loader": "^6.5.1",
+    "nodemon": "^2.0.15",
+    "sass": "^1.49.0",
+    "sass-loader": "^12.4.0",
+    "webpack": "^5.67.0"
   }
 }
